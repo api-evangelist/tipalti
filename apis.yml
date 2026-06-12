@@ -1,0 +1,106 @@
+aid: tipalti
+name: Tipalti
+type: Index
+image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+url: https://raw.githubusercontent.com/api-evangelist/tipalti/refs/heads/main/apis.yml
+created: 2026-06-12
+modified: 2026-06-12
+specificationVersion: "0.19"
+description: >
+  Tipalti is a global accounts payable and mass payments automation platform that enables
+  businesses to onboard suppliers, process payments across 196 countries in 120 currencies
+  using 50+ payment methods, and automate invoice processing and tax compliance. The platform
+  exposes a modern REST API for programmatic payee management, payment processing, invoice
+  creation, and procurement workflows, alongside a legacy SOAP API for payer and payee
+  functions that remains in use for existing integrations. Authentication uses OAuth 2.0
+  client credentials for the REST API and HMAC-based request signing for the SOAP API.
+  Tipalti operates dedicated sandbox and production environments, with documentation and
+  developer resources available through the Tipalti Developer Hub at developer.tipalti.com.
+tags:
+  - Accounts Payable
+  - Mass Payments
+  - Global Payments
+  - Payee Onboarding
+  - Invoice Management
+  - Tax Compliance
+  - Procurement
+  - Financial Automation
+  - Fintech
+  - B2B Payments
+apis:
+  - name: Tipalti REST API
+    description: >
+      Modern RESTful API for payee onboarding, payment processing, invoice management,
+      and procurement workflows. Uses JSON encoding, OAuth 2.0 authentication, and
+      supports operations across 200+ countries and territories.
+    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    humanURL: https://developer.tipalti.com/
+    baseURL: https://api.tipalti.com
+    tags:
+      - REST
+      - Payments
+      - Payees
+      - Invoices
+      - Procurement
+    properties:
+      - type: Documentation
+        url: https://developer.tipalti.com/
+      - type: OpenAPI
+        url: https://developer.tipalti.com/
+  - name: Tipalti SOAP API
+    description: >
+      Legacy SOAP-based API providing Payer and Payee functions including payee registration,
+      payment processing, and payer administrative operations. Currently at version 14 with
+      endpoints for both sandbox and production environments.
+    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    humanURL: https://soap-support.tipalti.com/Content/Topics/APIs/Intro.htm
+    baseURL: https://api.tipalti.com
+    tags:
+      - SOAP
+      - Payments
+      - Payees
+      - Payer
+    properties:
+      - type: Documentation
+        url: https://soap-support.tipalti.com/Content/Topics/APIs/Intro.htm
+  - name: Tipalti Procurement REST API
+    description: >
+      REST API providing programmatic access to Tipalti Procurement data, enabling
+      integration for purchase orders, purchase requisitions, and procurement workflows.
+      Designed for low-frequency polling with rate limits of 5 requests per minute for
+      updates and a 10-minute interval for reads.
+    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    humanURL: https://help.tipalti.com/hc/en-us/articles/30718248220823-Procurement-REST-API-documentation
+    baseURL: https://api.tipalti.com
+    tags:
+      - REST
+      - Procurement
+      - Purchase Orders
+      - Purchase Requisitions
+    properties:
+      - type: Documentation
+        url: https://help.tipalti.com/hc/en-us/articles/30718248220823-Procurement-REST-API-documentation
+common:
+  - type: Website
+    url: https://tipalti.com/
+  - type: Documentation
+    url: https://developer.tipalti.com/
+  - type: GitHubOrganization
+    url: https://github.com/tipalti
+  - type: LinkedIn
+    url: https://www.linkedin.com/company/tipalti
+  - type: X
+    url: https://x.com/tipalti
+  - type: Blog
+    url: https://tipalti.com/blog/
+  - type: Pricing
+    url: https://tipalti.com/pricing/
+  - type: Plans
+    url: plans/tipalti-plans-pricing.yml
+  - type: RateLimits
+    url: rate-limits/tipalti-rate-limits.yml
+  - type: FinOps
+    url: finops/tipalti-finops.yml
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

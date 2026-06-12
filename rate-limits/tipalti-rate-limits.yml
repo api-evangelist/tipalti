@@ -1,0 +1,85 @@
+specificationVersion: "0.1"
+specificationName: API Commons Rate Limits
+provider: Tipalti
+providerId: tipalti
+created: 2026-06-12
+modified: 2026-06-12
+description: >
+  Tipalti enforces rate limits on both its REST and SOAP APIs to ensure platform
+  stability. When rate limits are exceeded, the API returns HTTP 429 Too Many Requests.
+  The Procurement REST API has specific low-frequency guidelines for polling, reflecting
+  its design for batch integration rather than high-frequency real-time use.
+errorHandling:
+  throttledStatusCode: 429
+  retryAfterHeader: Retry-After
+  errorMessageFormat: >
+    "API calls quota exceeded. The maximum number of requests allowed: X per YYY {s/m/h/d}"
+  description: >
+    When the rate limit is exceeded, Tipalti returns HTTP 429 with an error message
+    indicating the allowed quota and time window. Callers should respect the Retry-After
+    header to determine when to retry the request.
+limits:
+  - name: Procurement REST API - Update Operations
+    scope: account
+    metric: requests
+    limit: 5
+    timeFrame: minute
+    description: >
+      No more than 5 requests per minute for write/update operations on Purchase Orders
+      or Purchase Requisitions via the Procurement REST API. This is the recommended
+      maximum for typical customer usage patterns.
+    applies_to:
+      - Procurement REST API
+    operations:
+      - Update POs
+      - Update PRs
+
+  - name: Procurement REST API - Read Operations
+    scope: account
+    metric: requests
+    limit: 1
+    timeFrame: 10 minutes
+    description: >
+      Read operations for Purchase Orders (GET POs) or Purchase Requisitions (GET PRs)
+      should be performed no more than once every 10 minutes. This reflects the
+      batch-oriented, non-real-time nature of procurement data polling.
+    applies_to:
+      - Procurement REST API
+    operations:
+      - GET POs
+      - GET PRs
+
+  - name: REST API General
+    scope: account
+    metric: requests
+    limit: null
+    timeFrame: null
+    description: >
+      The Tipalti REST API enforces rate limits on all endpoints. Specific per-endpoint
+      limits for the Payout and Payee Management APIs are enforced at the account level.
+      Contact Tipalti support for exact limits applicable to your plan. The API returns
+      429 errors when limits are exceeded.
+    applies_to:
+      - Tipalti REST API
+      - Payee Management API
+      - Payout API
+
+  - name: SOAP API General
+    scope: account
+    metric: requests
+    limit: null
+    timeFrame: null
+    description: >
+      The Tipalti SOAP API (v14) enforces request timeouts of 10 minutes per call.
+      High-volume payment processing should be batched appropriately. Rate limiting
+      is applied at the account level; contact Tipalti for specific quotas.
+    applies_to:
+      - Tipalti SOAP API
+    notes: API request timeout is 10 minutes per call.
+sandboxEnvironment:
+  description: >
+    Tipalti provides a dedicated sandbox environment for development and testing.
+    Sandbox rate limits may differ from production. Contact your Implementation Manager
+    to obtain sandbox API credentials.
+  sandboxBaseUrl: https://api.sandbox.tipalti.com
+  productionBaseUrl: https://api.tipalti.com

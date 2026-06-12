@@ -1,0 +1,144 @@
+specificationVersion: "0.1"
+specificationName: API Commons Plans
+provider: Tipalti
+providerId: tipalti
+created: 2026-06-12
+modified: 2026-06-12
+reconciled: true
+description: >
+  Tipalti offers subscription plans for its Accounts Payable and Mass Payments platforms.
+  Pricing is based on monthly subscription fees plus per-transaction costs, without
+  per-user fees. API access is included in paid plans via the Developer Hub. Custom
+  pricing is available for mid-market and enterprise customers.
+plans:
+  - name: Accounts Payable Starter
+    slug: ap-starter
+    type: paid
+    price: 99.00
+    priceCurrency: USD
+    billingPeriod: month
+    description: >
+      Entry-level Accounts Payable plan with unlimited users, a self-service supplier
+      portal, and core AP automation features. Includes API access via the Developer Hub.
+    quotas:
+      - metric: users
+        type: boolean
+        limit: unlimited
+        description: Unlimited users included at no additional per-seat cost
+      - metric: supplier_portal
+        type: boolean
+        limit: true
+        description: Self-service supplier portal included
+      - metric: api_access
+        type: boolean
+        limit: true
+        description: REST and SOAP API access via Developer Hub
+    notes: >
+      Per-invoice and per-payment transaction fees apply in addition to the monthly
+      subscription. Procurement, Expenses, and Treasury modules are add-ons.
+
+  - name: Accounts Payable Premium
+    slug: ap-premium
+    type: paid
+    price: null
+    priceCurrency: USD
+    billingPeriod: month
+    description: >
+      Mid-tier Accounts Payable plan with advanced automation features, additional
+      modules, and enhanced support. Custom pricing available.
+    quotas:
+      - metric: users
+        type: boolean
+        limit: unlimited
+        description: Unlimited users included
+      - metric: api_access
+        type: boolean
+        limit: true
+        description: REST and SOAP API access with advanced features
+      - metric: fraud_monitoring
+        type: boolean
+        limit: true
+        description: Detect risk module for fraud monitoring
+    notes: Contact Tipalti sales for custom pricing.
+
+  - name: Accounts Payable Elite
+    slug: ap-elite
+    type: enterprise
+    price: null
+    priceCurrency: USD
+    billingPeriod: month
+    description: >
+      Enterprise-grade Accounts Payable plan with full feature access, dedicated support,
+      multi-entity management, and custom integrations. Custom pricing available.
+    quotas:
+      - metric: users
+        type: boolean
+        limit: unlimited
+        description: Unlimited users across all entities
+      - metric: legal_entities
+        type: boolean
+        limit: unlimited
+        description: Multi-entity support included
+      - metric: api_access
+        type: boolean
+        limit: true
+        description: Full REST and SOAP API access with priority support
+      - metric: custom_integrations
+        type: boolean
+        limit: true
+        description: Custom ERP and system integrations supported
+    notes: Contact Tipalti enterprise sales for custom pricing and contract terms.
+
+  - name: Mass Payments Starter
+    slug: mass-payments-starter
+    type: paid
+    price: 249.00
+    priceCurrency: USD
+    billingPeriod: month
+    description: >
+      Entry-level Mass Payments plan with unlimited users, payee portal, and core
+      automation for global payouts to contractors, affiliates, creators, and suppliers.
+    quotas:
+      - metric: users
+        type: boolean
+        limit: unlimited
+        description: Unlimited users included
+      - metric: payee_portal
+        type: boolean
+        limit: true
+        description: Self-service payee portal for onboarding and payment preferences
+      - metric: payment_countries
+        type: boolean
+        limit: true
+        description: Payouts to 196 countries in 120 currencies via 50+ payment methods
+      - metric: api_access
+        type: boolean
+        limit: true
+        description: REST API access for payee management and payment processing
+    notes: >
+      Per-payment transaction fees apply in addition to the monthly subscription.
+      Fee amounts vary by payment method, currency, and destination country.
+
+  - name: Mass Payments Enterprise
+    slug: mass-payments-enterprise
+    type: enterprise
+    price: null
+    priceCurrency: USD
+    billingPeriod: month
+    description: >
+      Enterprise Mass Payments plan with advanced global payout capabilities,
+      multi-entity support, dedicated implementation, and volume-based pricing.
+    quotas:
+      - metric: payment_volume
+        type: metered
+        limit: null
+        description: Volume-based pricing with negotiated per-payment rates
+      - metric: api_access
+        type: boolean
+        limit: true
+        description: Full Payout API access with sandbox environment and dedicated support
+      - metric: erp_integrations
+        type: boolean
+        limit: true
+        description: Pre-built integrations with ERPs and accounting systems
+    notes: Contact Tipalti sales for enterprise pricing and SLA terms.

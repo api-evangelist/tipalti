@@ -1,0 +1,110 @@
+specificationVersion: "1.0"
+specificationName: FinOps Framework
+focusVersion: "1.0"
+provider: Tipalti
+providerId: tipalti
+created: 2026-06-12
+modified: 2026-06-12
+description: >
+  FinOps cost and billing framework for Tipalti API and platform usage. Tipalti uses
+  a hybrid billing model combining fixed monthly subscription fees with variable
+  per-transaction charges. Costs scale with payment volume, number of legal entities,
+  enabled modules, and payment methods used. There are no per-user or per-approver fees.
+billingModel:
+  type: hybrid
+  description: >
+    Fixed monthly platform subscription plus variable per-transaction fees.
+    Transaction costs vary by payment method, destination currency, and country.
+    Module add-ons (Procurement, Expenses, Treasury) incur additional monthly fees.
+  components:
+    - name: Platform Subscription
+      type: fixed
+      billingPeriod: month
+      description: Base monthly fee for the selected platform tier (AP or Mass Payments)
+    - name: Payment Transactions
+      type: metered
+      billingPeriod: month
+      description: Per-payment fee that varies by method, currency, and destination country
+    - name: Invoice Processing
+      type: metered
+      billingPeriod: month
+      description: Per-invoice processing fee for AP automation customers
+    - name: Module Add-ons
+      type: fixed
+      billingPeriod: month
+      description: Additional monthly fees for Procurement, Expenses, or Treasury modules
+focusColumns:
+  - column: BilledCost
+    description: Total monthly billed cost including subscription and all transaction fees
+  - column: EffectiveCost
+    description: Amortized cost per payment processed, factoring in subscription and transaction fees
+  - column: ListUnitPrice
+    description: Published per-payment rate for a given method, currency, and destination
+  - column: ServiceName
+    description: "Tipalti service: Accounts Payable, Mass Payments, Procurement, Expenses, or Treasury"
+  - column: ResourceType
+    description: "Resource type: Payment, Invoice, Payee, PurchaseOrder, or Subscription"
+  - column: Region
+    description: Destination country or region for the payment transaction
+  - column: ChargeType
+    description: "Usage (transaction), Recurring (subscription), or Tax"
+  - column: UsageQuantity
+    description: Number of payments processed or invoices handled in the billing period
+  - column: UsageUnit
+    description: "payment, invoice, or month"
+meters:
+  - name: PaymentVolume
+    unit: payment
+    description: Count of individual payments processed in the billing period
+    dimensions:
+      - PaymentMethod
+      - DestinationCountry
+      - Currency
+    notes: >
+      Tipalti supports 50+ payment methods across 196 countries in 120 currencies.
+      Per-payment fees vary significantly by method and destination.
+
+  - name: InvoiceVolume
+    unit: invoice
+    description: Count of invoices processed through the AP automation workflow
+    dimensions:
+      - InvoiceType
+      - LegalEntity
+    notes: Per-invoice fees apply for AP customers using invoice automation.
+
+  - name: PlatformSubscription
+    unit: month
+    description: Fixed monthly platform access fee
+    dimensions:
+      - PlanTier
+      - ProductModule
+    notes: >
+      AP plans start at $99/month; Mass Payments plans start at $249/month.
+      Module add-ons (Procurement, Expenses, Treasury) have additional monthly fees.
+
+  - name: LegalEntityCount
+    unit: entity
+    description: Number of legal entities managed within the Tipalti platform
+    notes: Multi-entity configurations may affect subscription pricing.
+principles:
+  Visibility:
+    description: >
+      Tipalti provides transaction-level reporting to give customers full visibility
+      into payment costs, statuses, and volume across all payment methods and geographies.
+    features:
+      - Transaction-level cost reporting available in Premium and Elite plans
+      - Payment status tracking across 196 countries
+      - Exportable reports for reconciliation with ERP and accounting systems
+      - Real-time payment status via API for programmatic cost monitoring
+  Optimization:
+    description: >
+      Customers can optimize costs by selecting the most cost-effective payment methods
+      for each destination country and currency, batching payments to maximize efficiency,
+      and choosing the appropriate plan tier based on expected payment volume.
+    strategies:
+      - Select lowest-cost payment methods per destination (e.g., local bank transfer vs. wire)
+      - Batch payments to reduce per-transaction overhead
+      - Use sandbox environment for development to avoid incurring production fees
+      - Negotiate volume-based discounts for high-payment-volume enterprise use cases
+      - Consolidate legal entities where possible to minimize add-on module costs
+      - Monitor 429 rate limit errors to optimize API call patterns and avoid retries
