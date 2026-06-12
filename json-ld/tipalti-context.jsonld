@@ -1,0 +1,82 @@
+{
+  "@context": {
+    "@vocab": "https://schema.org/",
+    "tipalti": "https://tipalti.com/vocab#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "aid": "https://apis.io/vocab#aid",
+    "Payee": "tipalti:Payee",
+    "Payer": "tipalti:Payer",
+    "Payment": "tipalti:Payment",
+    "Invoice": "tipalti:Invoice",
+    "PurchaseOrder": "tipalti:PurchaseOrder",
+    "PurchaseRequisition": "tipalti:PurchaseRequisition",
+    "PaymentMethod": "tipalti:PaymentMethod",
+    "TaxForm": "tipalti:TaxForm",
+    "payeeId": {
+      "@id": "tipalti:payeeId",
+      "@type": "xsd:string"
+    },
+    "payerId": {
+      "@id": "tipalti:payerId",
+      "@type": "xsd:string"
+    },
+    "paymentCurrency": {
+      "@id": "tipalti:paymentCurrency",
+      "@type": "xsd:string"
+    },
+    "paymentAmount": {
+      "@id": "tipalti:paymentAmount",
+      "@type": "xsd:decimal"
+    },
+    "paymentStatus": {
+      "@id": "tipalti:paymentStatus",
+      "@type": "xsd:string"
+    },
+    "invoiceNumber": {
+      "@id": "tipalti:invoiceNumber",
+      "@type": "xsd:string"
+    },
+    "invoiceDate": {
+      "@id": "tipalti:invoiceDate",
+      "@type": "xsd:date"
+    },
+    "invoiceStatus": {
+      "@id": "tipalti:invoiceStatus",
+      "@type": "xsd:string"
+    },
+    "poNumber": {
+      "@id": "tipalti:poNumber",
+      "@type": "xsd:string"
+    },
+    "taxFormType": {
+      "@id": "tipalti:taxFormType",
+      "@type": "xsd:string"
+    },
+    "onboardingStatus": {
+      "@id": "tipalti:onboardingStatus",
+      "@type": "xsd:string"
+    },
+    "countryCode": {
+      "@id": "tipalti:countryCode",
+      "@type": "xsd:string"
+    },
+    "Organization": "schema:Organization",
+    "name": "schema:name",
+    "description": "schema:description",
+    "url": "schema:url",
+    "email": "schema:email",
+    "telephone": "schema:telephone",
+    "address": "schema:address"
+  },
+  "@type": "schema:Organization",
+  "@id": "https://tipalti.com/#organization",
+  "name": "Tipalti",
+  "description": "Global accounts payable and mass payments automation platform enabling businesses to onboard suppliers, process payments across 196 countries in 120 currencies, and automate invoice processing and tax compliance.",
+  "url": "https://tipalti.com/",
+  "sameAs": [
+    "https://developer.tipalti.com/",
+    "https://github.com/tipalti",
+    "https://www.linkedin.com/company/tipalti",
+    "https://x.com/tipalti"
+  ]
+}

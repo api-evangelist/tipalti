@@ -1,0 +1,8 @@
+{
+  "name": "Tipalti Blog",
+  "description": "Finance automation blog covering accounts payable, mass payments, procurement, and global finance insights.",
+  "url": "https://tipalti.com/blog/",
+  "rssUrl": null,
+  "rssNote": "WordPress RSS feed at https://tipalti.com/feed/ returns HTTP 500; blog available at https://tipalti.com/blog/",
+  "posts": []
+}
