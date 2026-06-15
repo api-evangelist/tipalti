@@ -4,5 +4,17 @@
   "url": "https://tipalti.com/blog/",
   "rssUrl": null,
   "rssNote": "WordPress RSS feed at https://tipalti.com/feed/ returns HTTP 500; blog available at https://tipalti.com/blog/",
-  "posts": []
+  "posts": [],
+  "repo": "tipalti",
+  "feeds": [
+    {
+      "source": "https://x.com/tipalti",
+      "feed_url": "https://x.com/tipalti",
+      "title": "",
+      "saved": 0,
+      "method": "none"
+    }
+  ],
+  "post_count": 0,
+  "fetched": "2026-06-14T20:42:17Z"
 }
