@@ -1,0 +1,1001 @@
+"""
+Tipalti GraphQL Schema
+Conceptual schema derived from Tipalti REST API covering global payables automation,
+supplier payments, invoice management, tax compliance, and payment routing.
+"""
+
+# ─────────────────────────────────────────────────────────────
+# Scalars
+# ─────────────────────────────────────────────────────────────
+
+scalar DateTime
+scalar Date
+scalar Decimal
+scalar JSON
+scalar Upload
+
+# ─────────────────────────────────────────────────────────────
+# Enums
+# ─────────────────────────────────────────────────────────────
+
+enum PayeeStatus {
+  ACTIVE
+  INACTIVE
+  PENDING
+  SUSPENDED
+  BLOCKED
+  DELETED
+}
+
+enum PayeeType {
+  INDIVIDUAL
+  COMPANY
+}
+
+enum PaymentMethod {
+  ACH
+  WIRE
+  CHECK
+  PAYPAL
+  PREPAID_DEBIT
+  ECHECK
+  CRYPTOCURRENCY
+  LOCAL_BANK_TRANSFER
+  SEPA
+  SWIFT
+}
+
+enum PaymentStatus {
+  PENDING
+  SCHEDULED
+  PROCESSING
+  PAID
+  FAILED
+  CANCELLED
+  RETURNED
+  ON_HOLD
+}
+
+enum InvoiceStatus {
+  DRAFT
+  SUBMITTED
+  APPROVED
+  REJECTED
+  PAID
+  CANCELLED
+  PENDING_APPROVAL
+  OVERDUE
+}
+
+enum InvoiceLineItemType {
+  GOODS
+  SERVICES
+  EXPENSE
+  CREDIT
+  DEBIT_MEMO
+}
+
+enum TaxFormType {
+  W9
+  W8BEN
+  W8BEN_E
+  W8ECI
+  W8EXP
+  W8IMY
+  VAT
+  NONE_REQUIRED
+}
+
+enum TaxFormStatus {
+  NOT_SUBMITTED
+  SUBMITTED
+  APPROVED
+  REJECTED
+  EXPIRED
+}
+
+enum CurrencyCode {
+  USD
+  EUR
+  GBP
+  CAD
+  AUD
+  JPY
+  CHF
+  SEK
+  NOK
+  DKK
+  HKD
+  SGD
+  MXN
+  BRL
+  INR
+  CNY
+  ZAR
+  NZD
+  AED
+  ILS
+}
+
+enum CountryCode {
+  US
+  GB
+  CA
+  AU
+  DE
+  FR
+  JP
+  IN
+  BR
+  MX
+  SG
+  HK
+  IL
+  AE
+  ZA
+  NZ
+  SE
+  NO
+  DK
+  CH
+}
+
+enum PurchaseOrderStatus {
+  DRAFT
+  PENDING_APPROVAL
+  APPROVED
+  REJECTED
+  SENT
+  PARTIALLY_RECEIVED
+  FULLY_RECEIVED
+  CLOSED
+  CANCELLED
+}
+
+enum RequisitionStatus {
+  DRAFT
+  SUBMITTED
+  PENDING_APPROVAL
+  APPROVED
+  REJECTED
+  CONVERTED
+  CANCELLED
+}
+
+enum ApprovalStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  ESCALATED
+  CANCELLED
+}
+
+enum PaymentOrderStatus {
+  CREATED
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum NotificationType {
+  PAYMENT_SENT
+  PAYMENT_FAILED
+  INVOICE_RECEIVED
+  INVOICE_APPROVED
+  INVOICE_REJECTED
+  TAX_FORM_REQUIRED
+  TAX_FORM_APPROVED
+  PAYEE_REGISTRATION
+  ACCOUNT_LOCKED
+}
+
+enum SortDirection {
+  ASC
+  DESC
+}
+
+enum WebhookEventType {
+  PAYEE_CREATED
+  PAYEE_UPDATED
+  PAYEE_STATUS_CHANGED
+  PAYMENT_COMPLETED
+  PAYMENT_FAILED
+  INVOICE_SUBMITTED
+  INVOICE_APPROVED
+  INVOICE_REJECTED
+  TAX_FORM_SUBMITTED
+  TAX_FORM_APPROVED
+}
+
+enum BankAccountType {
+  CHECKING
+  SAVINGS
+  CORPORATE
+}
+
+enum ExpenseCategory {
+  TRAVEL
+  MEALS
+  LODGING
+  SOFTWARE
+  EQUIPMENT
+  PROFESSIONAL_SERVICES
+  MARKETING
+  UTILITIES
+  RENT
+  OTHER
+}
+
+# ─────────────────────────────────────────────────────────────
+# Core Object Types
+# ─────────────────────────────────────────────────────────────
+
+type Payee {
+  id: ID!
+  refCode: String!
+  email: String!
+  name: String!
+  type: PayeeType!
+  status: PayeeStatus!
+  currency: CurrencyCode!
+  country: CountryCode!
+  address: Address
+  contactInfo: ContactInfo
+  taxInfo: TaxInfo
+  bankAccounts: [BankAccount!]!
+  paymentMethod: PaymentMethod
+  invoices: [Invoice!]!
+  payments: [Payment!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  metadata: JSON
+}
+
+type Address {
+  line1: String!
+  line2: String
+  city: String!
+  state: String
+  postalCode: String
+  country: CountryCode!
+}
+
+type ContactInfo {
+  firstName: String
+  lastName: String
+  phone: String
+  website: String
+  taxId: String
+}
+
+type TaxInfo {
+  formType: TaxFormType!
+  formStatus: TaxFormStatus!
+  taxId: String
+  countryOfResidence: CountryCode
+  submittedAt: DateTime
+  expiresAt: Date
+  withholdingRate: Decimal
+}
+
+type BankAccount {
+  id: ID!
+  payeeId: ID!
+  accountType: BankAccountType!
+  bankName: String!
+  accountNumber: String
+  routingNumber: String
+  iban: String
+  swiftCode: String
+  currency: CurrencyCode!
+  isDefault: Boolean!
+  isVerified: Boolean!
+  createdAt: DateTime!
+}
+
+type Invoice {
+  id: ID!
+  invoiceNumber: String!
+  payeeId: ID!
+  payee: Payee
+  status: InvoiceStatus!
+  currency: CurrencyCode!
+  subtotal: Decimal!
+  taxAmount: Decimal!
+  totalAmount: Decimal!
+  dueDate: Date
+  issueDate: Date!
+  description: String
+  lineItems: [InvoiceLineItem!]!
+  approvals: [ApprovalRecord!]!
+  payment: Payment
+  attachments: [Attachment!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  metadata: JSON
+}
+
+type InvoiceLineItem {
+  id: ID!
+  invoiceId: ID!
+  type: InvoiceLineItemType!
+  description: String!
+  quantity: Decimal!
+  unitPrice: Decimal!
+  totalPrice: Decimal!
+  currency: CurrencyCode!
+  taxRate: Decimal
+  taxAmount: Decimal
+  expenseCategory: ExpenseCategory
+  glCode: String
+}
+
+type Payment {
+  id: ID!
+  payeeId: ID!
+  payee: Payee
+  invoiceId: ID
+  invoice: Invoice
+  paymentOrderId: ID
+  paymentOrder: PaymentOrder
+  status: PaymentStatus!
+  method: PaymentMethod!
+  amount: Decimal!
+  currency: CurrencyCode!
+  exchangeRate: Decimal
+  localAmount: Decimal
+  localCurrency: CurrencyCode
+  scheduledDate: Date
+  processedAt: DateTime
+  referenceNumber: String
+  bankReference: String
+  failureReason: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  metadata: JSON
+}
+
+type PaymentOrder {
+  id: ID!
+  status: PaymentOrderStatus!
+  totalAmount: Decimal!
+  currency: CurrencyCode!
+  payments: [Payment!]!
+  scheduledDate: Date
+  description: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type TaxForm {
+  id: ID!
+  payeeId: ID!
+  payee: Payee
+  formType: TaxFormType!
+  status: TaxFormStatus!
+  taxId: String
+  submittedAt: DateTime
+  approvedAt: DateTime
+  expiresAt: Date
+  withholdingRate: Decimal
+  countryOfResidence: CountryCode
+  reviewNotes: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type PurchaseOrder {
+  id: ID!
+  orderNumber: String!
+  status: PurchaseOrderStatus!
+  vendorId: ID
+  vendor: Payee
+  currency: CurrencyCode!
+  subtotal: Decimal!
+  taxAmount: Decimal
+  totalAmount: Decimal!
+  issueDate: Date!
+  deliveryDate: Date
+  description: String
+  lineItems: [PurchaseOrderLineItem!]!
+  approvals: [ApprovalRecord!]!
+  invoices: [Invoice!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  metadata: JSON
+}
+
+type PurchaseOrderLineItem {
+  id: ID!
+  purchaseOrderId: ID!
+  description: String!
+  quantity: Decimal!
+  unitPrice: Decimal!
+  totalPrice: Decimal!
+  currency: CurrencyCode!
+  glCode: String
+  receivedQuantity: Decimal
+}
+
+type PurchaseRequisition {
+  id: ID!
+  requisitionNumber: String!
+  status: RequisitionStatus!
+  requesterId: ID!
+  requester: User
+  currency: CurrencyCode!
+  totalAmount: Decimal!
+  description: String
+  lineItems: [RequisitionLineItem!]!
+  approvals: [ApprovalRecord!]!
+  convertedPurchaseOrderId: ID
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type RequisitionLineItem {
+  id: ID!
+  requisitionId: ID!
+  description: String!
+  quantity: Decimal!
+  estimatedUnitPrice: Decimal!
+  estimatedTotal: Decimal!
+  currency: CurrencyCode!
+  expenseCategory: ExpenseCategory
+  glCode: String
+}
+
+type ApprovalRecord {
+  id: ID!
+  approverId: ID!
+  approver: User
+  status: ApprovalStatus!
+  approvedAt: DateTime
+  comments: String
+  level: Int!
+}
+
+type ApprovalWorkflow {
+  id: ID!
+  name: String!
+  entityType: String!
+  steps: [ApprovalStep!]!
+  isActive: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type ApprovalStep {
+  id: ID!
+  workflowId: ID!
+  level: Int!
+  approvers: [User!]!
+  requiredApprovals: Int!
+  escalationDays: Int
+}
+
+type User {
+  id: ID!
+  email: String!
+  firstName: String!
+  lastName: String!
+  role: String!
+  isActive: Boolean!
+  createdAt: DateTime!
+}
+
+type Attachment {
+  id: ID!
+  filename: String!
+  contentType: String!
+  size: Int!
+  url: String!
+  uploadedAt: DateTime!
+}
+
+type Webhook {
+  id: ID!
+  url: String!
+  eventTypes: [WebhookEventType!]!
+  isActive: Boolean!
+  secret: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type WebhookDelivery {
+  id: ID!
+  webhookId: ID!
+  eventType: WebhookEventType!
+  payload: JSON!
+  responseStatus: Int
+  responseBody: String
+  deliveredAt: DateTime
+  failed: Boolean!
+  failureReason: String
+}
+
+type Notification {
+  id: ID!
+  type: NotificationType!
+  recipientId: ID!
+  subject: String!
+  body: String!
+  isRead: Boolean!
+  sentAt: DateTime!
+}
+
+type ExchangeRate {
+  fromCurrency: CurrencyCode!
+  toCurrency: CurrencyCode!
+  rate: Decimal!
+  effectiveDate: Date!
+}
+
+type PaymentReport {
+  periodStart: Date!
+  periodEnd: Date!
+  totalPayments: Int!
+  totalAmount: Decimal!
+  currency: CurrencyCode!
+  byStatus: [PaymentStatusSummary!]!
+  byMethod: [PaymentMethodSummary!]!
+  byCountry: [PaymentCountrySummary!]!
+}
+
+type PaymentStatusSummary {
+  status: PaymentStatus!
+  count: Int!
+  totalAmount: Decimal!
+}
+
+type PaymentMethodSummary {
+  method: PaymentMethod!
+  count: Int!
+  totalAmount: Decimal!
+}
+
+type PaymentCountrySummary {
+  country: CountryCode!
+  count: Int!
+  totalAmount: Decimal!
+}
+
+type PayeeConnection {
+  nodes: [Payee!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type InvoiceConnection {
+  nodes: [Invoice!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type PaymentConnection {
+  nodes: [Payment!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type PurchaseOrderConnection {
+  nodes: [PurchaseOrder!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+# ─────────────────────────────────────────────────────────────
+# Input Types
+# ─────────────────────────────────────────────────────────────
+
+input CreatePayeeInput {
+  refCode: String!
+  email: String!
+  name: String!
+  type: PayeeType!
+  currency: CurrencyCode!
+  country: CountryCode!
+  address: AddressInput
+  contactInfo: ContactInfoInput
+  paymentMethod: PaymentMethod
+  metadata: JSON
+}
+
+input UpdatePayeeInput {
+  name: String
+  email: String
+  currency: CurrencyCode
+  country: CountryCode
+  address: AddressInput
+  contactInfo: ContactInfoInput
+  paymentMethod: PaymentMethod
+  status: PayeeStatus
+  metadata: JSON
+}
+
+input AddressInput {
+  line1: String!
+  line2: String
+  city: String!
+  state: String
+  postalCode: String
+  country: CountryCode!
+}
+
+input ContactInfoInput {
+  firstName: String
+  lastName: String
+  phone: String
+  website: String
+  taxId: String
+}
+
+input CreateBankAccountInput {
+  payeeId: ID!
+  accountType: BankAccountType!
+  bankName: String!
+  accountNumber: String
+  routingNumber: String
+  iban: String
+  swiftCode: String
+  currency: CurrencyCode!
+  isDefault: Boolean
+}
+
+input CreateInvoiceInput {
+  invoiceNumber: String!
+  payeeId: ID!
+  currency: CurrencyCode!
+  issueDate: Date!
+  dueDate: Date
+  description: String
+  lineItems: [InvoiceLineItemInput!]!
+  metadata: JSON
+}
+
+input InvoiceLineItemInput {
+  type: InvoiceLineItemType!
+  description: String!
+  quantity: Decimal!
+  unitPrice: Decimal!
+  currency: CurrencyCode!
+  taxRate: Decimal
+  expenseCategory: ExpenseCategory
+  glCode: String
+}
+
+input UpdateInvoiceInput {
+  status: InvoiceStatus
+  dueDate: Date
+  description: String
+  lineItems: [InvoiceLineItemInput!]
+  metadata: JSON
+}
+
+input CreatePaymentInput {
+  payeeId: ID!
+  invoiceId: ID
+  method: PaymentMethod!
+  amount: Decimal!
+  currency: CurrencyCode!
+  scheduledDate: Date
+  metadata: JSON
+}
+
+input CreatePaymentOrderInput {
+  paymentIds: [ID!]!
+  scheduledDate: Date
+  description: String
+}
+
+input CreatePurchaseOrderInput {
+  orderNumber: String!
+  vendorId: ID
+  currency: CurrencyCode!
+  issueDate: Date!
+  deliveryDate: Date
+  description: String
+  lineItems: [PurchaseOrderLineItemInput!]!
+  metadata: JSON
+}
+
+input PurchaseOrderLineItemInput {
+  description: String!
+  quantity: Decimal!
+  unitPrice: Decimal!
+  currency: CurrencyCode!
+  glCode: String
+}
+
+input CreateRequisitionInput {
+  currency: CurrencyCode!
+  description: String
+  lineItems: [RequisitionLineItemInput!]!
+}
+
+input RequisitionLineItemInput {
+  description: String!
+  quantity: Decimal!
+  estimatedUnitPrice: Decimal!
+  currency: CurrencyCode!
+  expenseCategory: ExpenseCategory
+  glCode: String
+}
+
+input SubmitTaxFormInput {
+  payeeId: ID!
+  formType: TaxFormType!
+  taxId: String
+  countryOfResidence: CountryCode
+}
+
+input CreateWebhookInput {
+  url: String!
+  eventTypes: [WebhookEventType!]!
+  secret: String
+}
+
+input UpdateWebhookInput {
+  url: String
+  eventTypes: [WebhookEventType!]
+  isActive: Boolean
+  secret: String
+}
+
+input PayeeFilterInput {
+  status: PayeeStatus
+  type: PayeeType
+  country: CountryCode
+  currency: CurrencyCode
+  search: String
+}
+
+input InvoiceFilterInput {
+  status: InvoiceStatus
+  payeeId: ID
+  currency: CurrencyCode
+  dueDateFrom: Date
+  dueDateTo: Date
+  issueDateFrom: Date
+  issueDateTo: Date
+  minAmount: Decimal
+  maxAmount: Decimal
+}
+
+input PaymentFilterInput {
+  status: PaymentStatus
+  method: PaymentMethod
+  payeeId: ID
+  currency: CurrencyCode
+  processedFrom: DateTime
+  processedTo: DateTime
+  minAmount: Decimal
+  maxAmount: Decimal
+}
+
+input PurchaseOrderFilterInput {
+  status: PurchaseOrderStatus
+  vendorId: ID
+  currency: CurrencyCode
+  issueDateFrom: Date
+  issueDateTo: Date
+}
+
+input PaginationInput {
+  first: Int
+  after: String
+  last: Int
+  before: String
+}
+
+input SortInput {
+  field: String!
+  direction: SortDirection!
+}
+
+# ─────────────────────────────────────────────────────────────
+# Mutation Result Types
+# ─────────────────────────────────────────────────────────────
+
+type PayeeMutationResult {
+  payee: Payee
+  success: Boolean!
+  errors: [MutationError!]!
+}
+
+type InvoiceMutationResult {
+  invoice: Invoice
+  success: Boolean!
+  errors: [MutationError!]!
+}
+
+type PaymentMutationResult {
+  payment: Payment
+  success: Boolean!
+  errors: [MutationError!]!
+}
+
+type PaymentOrderMutationResult {
+  paymentOrder: PaymentOrder
+  success: Boolean!
+  errors: [MutationError!]!
+}
+
+type PurchaseOrderMutationResult {
+  purchaseOrder: PurchaseOrder
+  success: Boolean!
+  errors: [MutationError!]!
+}
+
+type RequisitionMutationResult {
+  requisition: PurchaseRequisition
+  success: Boolean!
+  errors: [MutationError!]!
+}
+
+type TaxFormMutationResult {
+  taxForm: TaxForm
+  success: Boolean!
+  errors: [MutationError!]!
+}
+
+type WebhookMutationResult {
+  webhook: Webhook
+  success: Boolean!
+  errors: [MutationError!]!
+}
+
+type BankAccountMutationResult {
+  bankAccount: BankAccount
+  success: Boolean!
+  errors: [MutationError!]!
+}
+
+type MutationError {
+  field: String
+  message: String!
+  code: String
+}
+
+type DeleteResult {
+  success: Boolean!
+  id: ID
+  errors: [MutationError!]!
+}
+
+# ─────────────────────────────────────────────────────────────
+# Query Root
+# ─────────────────────────────────────────────────────────────
+
+type Query {
+  # Payee queries
+  payee(id: ID!): Payee
+  payeeByRefCode(refCode: String!): Payee
+  payees(filter: PayeeFilterInput, pagination: PaginationInput, sort: SortInput): PayeeConnection!
+
+  # Invoice queries
+  invoice(id: ID!): Invoice
+  invoiceByNumber(invoiceNumber: String!): Invoice
+  invoices(filter: InvoiceFilterInput, pagination: PaginationInput, sort: SortInput): InvoiceConnection!
+  payeeInvoices(payeeId: ID!, filter: InvoiceFilterInput, pagination: PaginationInput): InvoiceConnection!
+
+  # Payment queries
+  payment(id: ID!): Payment
+  payments(filter: PaymentFilterInput, pagination: PaginationInput, sort: SortInput): PaymentConnection!
+  payeePayments(payeeId: ID!, filter: PaymentFilterInput, pagination: PaginationInput): PaymentConnection!
+
+  # Payment order queries
+  paymentOrder(id: ID!): PaymentOrder
+  paymentOrders(status: PaymentOrderStatus, pagination: PaginationInput): [PaymentOrder!]!
+
+  # Tax form queries
+  taxForm(id: ID!): TaxForm
+  taxForms(payeeId: ID, status: TaxFormStatus, pagination: PaginationInput): [TaxForm!]!
+  payeeTaxForms(payeeId: ID!): [TaxForm!]!
+
+  # Purchase order queries
+  purchaseOrder(id: ID!): PurchaseOrder
+  purchaseOrders(filter: PurchaseOrderFilterInput, pagination: PaginationInput, sort: SortInput): PurchaseOrderConnection!
+
+  # Requisition queries
+  purchaseRequisition(id: ID!): PurchaseRequisition
+  purchaseRequisitions(status: RequisitionStatus, pagination: PaginationInput): [PurchaseRequisition!]!
+
+  # Bank account queries
+  bankAccount(id: ID!): BankAccount
+  payeeBankAccounts(payeeId: ID!): [BankAccount!]!
+
+  # Approval workflow queries
+  approvalWorkflow(id: ID!): ApprovalWorkflow
+  approvalWorkflows(entityType: String): [ApprovalWorkflow!]!
+
+  # Webhook queries
+  webhook(id: ID!): Webhook
+  webhooks: [Webhook!]!
+  webhookDeliveries(webhookId: ID!, pagination: PaginationInput): [WebhookDelivery!]!
+
+  # Reporting queries
+  paymentReport(periodStart: Date!, periodEnd: Date!, currency: CurrencyCode): PaymentReport!
+
+  # Exchange rate queries
+  exchangeRate(fromCurrency: CurrencyCode!, toCurrency: CurrencyCode!, date: Date): ExchangeRate
+
+  # Notification queries
+  notifications(unreadOnly: Boolean, pagination: PaginationInput): [Notification!]!
+
+  # User queries
+  currentUser: User
+  users(isActive: Boolean): [User!]!
+}
+
+# ─────────────────────────────────────────────────────────────
+# Mutation Root
+# ─────────────────────────────────────────────────────────────
+
+type Mutation {
+  # Payee mutations
+  createPayee(input: CreatePayeeInput!): PayeeMutationResult!
+  updatePayee(id: ID!, input: UpdatePayeeInput!): PayeeMutationResult!
+  deactivatePayee(id: ID!): PayeeMutationResult!
+  activatePayee(id: ID!): PayeeMutationResult!
+  deletePayee(id: ID!): DeleteResult!
+
+  # Bank account mutations
+  addBankAccount(input: CreateBankAccountInput!): BankAccountMutationResult!
+  setDefaultBankAccount(id: ID!): BankAccountMutationResult!
+  removeBankAccount(id: ID!): DeleteResult!
+
+  # Invoice mutations
+  createInvoice(input: CreateInvoiceInput!): InvoiceMutationResult!
+  updateInvoice(id: ID!, input: UpdateInvoiceInput!): InvoiceMutationResult!
+  submitInvoice(id: ID!): InvoiceMutationResult!
+  approveInvoice(id: ID!, comments: String): InvoiceMutationResult!
+  rejectInvoice(id: ID!, reason: String!): InvoiceMutationResult!
+  cancelInvoice(id: ID!): InvoiceMutationResult!
+
+  # Payment mutations
+  createPayment(input: CreatePaymentInput!): PaymentMutationResult!
+  cancelPayment(id: ID!, reason: String): PaymentMutationResult!
+
+  # Payment order mutations
+  createPaymentOrder(input: CreatePaymentOrderInput!): PaymentOrderMutationResult!
+  cancelPaymentOrder(id: ID!): PaymentOrderMutationResult!
+
+  # Tax form mutations
+  submitTaxForm(input: SubmitTaxFormInput!): TaxFormMutationResult!
+  approveTaxForm(id: ID!, notes: String): TaxFormMutationResult!
+  rejectTaxForm(id: ID!, reason: String!): TaxFormMutationResult!
+
+  # Purchase order mutations
+  createPurchaseOrder(input: CreatePurchaseOrderInput!): PurchaseOrderMutationResult!
+  approvePurchaseOrder(id: ID!, comments: String): PurchaseOrderMutationResult!
+  rejectPurchaseOrder(id: ID!, reason: String!): PurchaseOrderMutationResult!
+  closePurchaseOrder(id: ID!): PurchaseOrderMutationResult!
+  cancelPurchaseOrder(id: ID!): PurchaseOrderMutationResult!
+
+  # Requisition mutations
+  createRequisition(input: CreateRequisitionInput!): RequisitionMutationResult!
+  submitRequisition(id: ID!): RequisitionMutationResult!
+  approveRequisition(id: ID!, comments: String): RequisitionMutationResult!
+  rejectRequisition(id: ID!, reason: String!): RequisitionMutationResult!
+  convertRequisitionToPurchaseOrder(id: ID!): PurchaseOrderMutationResult!
+
+  # Webhook mutations
+  createWebhook(input: CreateWebhookInput!): WebhookMutationResult!
+  updateWebhook(id: ID!, input: UpdateWebhookInput!): WebhookMutationResult!
+  deleteWebhook(id: ID!): DeleteResult!
+  retryWebhookDelivery(deliveryId: ID!): WebhookMutationResult!
+
+  # Notification mutations
+  markNotificationRead(id: ID!): Notification
+  markAllNotificationsRead: Boolean!
+}

@@ -47,6 +47,8 @@ apis:
         url: https://developer.tipalti.com/
       - type: OpenAPI
         url: https://developer.tipalti.com/
+      - type: GraphQL
+        url: graphql/tipalti-graphql.md
   - name: Tipalti SOAP API
     description: >
       Legacy SOAP-based API providing Payer and Payee functions including payee registration,
