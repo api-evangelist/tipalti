@@ -1,7 +1,7 @@
 aid: tipalti
 name: Tipalti
 type: Index
-image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
 url: https://raw.githubusercontent.com/api-evangelist/tipalti/refs/heads/main/apis.yml
 created: 2026-06-12
 modified: 2026-06-12
@@ -33,7 +33,7 @@ apis:
       Modern RESTful API for payee onboarding, payment processing, invoice management,
       and procurement workflows. Uses JSON encoding, OAuth 2.0 authentication, and
       supports operations across 200+ countries and territories.
-    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
     humanURL: https://developer.tipalti.com/
     baseURL: https://api.tipalti.com
     tags:
@@ -54,7 +54,7 @@ apis:
       Legacy SOAP-based API providing Payer and Payee functions including payee registration,
       payment processing, and payer administrative operations. Currently at version 14 with
       endpoints for both sandbox and production environments.
-    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
     humanURL: https://soap-support.tipalti.com/Content/Topics/APIs/Intro.htm
     baseURL: https://api.tipalti.com
     tags:
@@ -71,7 +71,7 @@ apis:
       integration for purchase orders, purchase requisitions, and procurement workflows.
       Designed for low-frequency polling with rate limits of 5 requests per minute for
       updates and a 10-minute interval for reads.
-    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
     humanURL: https://help.tipalti.com/hc/en-us/articles/30718248220823-Procurement-REST-API-documentation
     baseURL: https://api.tipalti.com
     tags:
