@@ -1,20 +1,14 @@
 {
-  "name": "Tipalti Blog",
-  "description": "Finance automation blog covering accounts payable, mass payments, procurement, and global finance insights.",
-  "url": "https://tipalti.com/blog/",
-  "rssUrl": null,
-  "rssNote": "WordPress RSS feed at https://tipalti.com/feed/ returns HTTP 500; blog available at https://tipalti.com/blog/",
-  "posts": [],
   "repo": "tipalti",
   "feeds": [
     {
-      "source": "https://x.com/tipalti",
-      "feed_url": "https://x.com/tipalti",
-      "title": "",
-      "saved": 0,
-      "method": "none"
+      "source": "https://tipalti.com/blog/",
+      "feed_url": "",
+      "saved": 2,
+      "method": "agent-scrape"
     }
   ],
-  "post_count": 0,
-  "fetched": "2026-06-14T20:42:17Z"
+  "fetched": "2026-06-27T13:15:39Z",
+  "post_count": 4,
+  "agent_pulled": "2026-06-27"
 }
