@@ -83,6 +83,8 @@ apis:
       - type: Documentation
         url: https://help.tipalti.com/hc/en-us/articles/30718248220823-Procurement-REST-API-documentation
 common:
+  - type: DomainSecurity
+    url: security/tipalti-domain-security.yml
   - type: Website
     url: https://tipalti.com/
   - type: Documentation
