@@ -2,13 +2,14 @@
   "repo": "tipalti",
   "feeds": [
     {
-      "source": "https://tipalti.com/blog/",
-      "feed_url": "",
-      "saved": 2,
-      "method": "agent-scrape"
+      "source": "https://x.com/tipalti",
+      "feed_url": "https://x.com/tipalti",
+      "title": "",
+      "saved": 0,
+      "method": "none"
     }
   ],
-  "fetched": "2026-06-27T13:15:39Z",
-  "post_count": 4,
+  "fetched": "2026-07-11T11:50:51Z",
+  "post_count": 5,
   "agent_pulled": "2026-06-27"
 }
