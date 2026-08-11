@@ -95,6 +95,12 @@ apis:
       - type: Documentation
         url: https://help.tipalti.com/hc/en-us/articles/30718248220823-Procurement-REST-API-documentation
 common:
+  - type: Support
+    url: https://tipalti.com/resources/support/
+  - type: PrivacyPolicy
+    url: https://tipalti.com/privacy/
+  - type: OpenIDConnect
+    url: https://tipalti.com/.well-known/oauth-authorization-server
   - type: DomainSecurity
     url: security/tipalti-domain-security.yml
   - type: Website
