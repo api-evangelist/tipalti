@@ -84,6 +84,11 @@ apis:
       - SOAP
       - Payments
       - Payees
+      - Payers
+    tags_raw:
+      - SOAP
+      - Payments
+      - Payees
       - Payer
     properties:
       - type: Documentation
