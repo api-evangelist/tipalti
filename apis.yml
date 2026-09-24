@@ -50,6 +50,8 @@ tags:
   - Financial Automation
   - Fintech
   - B2B Payments
+  - Accounting
+  - Invoicing
 apis:
   - name: Tipalti REST API
     description: >
@@ -70,8 +72,6 @@ apis:
         url: https://developer.tipalti.com/
       - type: OpenAPI
         url: https://developer.tipalti.com/
-      - type: GraphQL
-        url: graphql/tipalti-graphql.md
   - name: Tipalti SOAP API
     description: >
       Legacy SOAP-based API providing Payer and Payee functions including payee registration,
