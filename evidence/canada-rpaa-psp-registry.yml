@@ -1,0 +1,31 @@
+kind: regulatory-finding
+market: canada-rpaa-psp-registry
+detected_by: sweep-canada-rpaa-psp-registry.py
+first_seen: '2026-10-22'
+findings:
+- register: Bank of Canada RPAA registry of payment service providers
+  registered_name: Tipalti, Inc.
+  brand: null
+  register_status: revoked
+  register_id: 75a7e334-7098-ef11-8a69-6045bd5e516b
+  evidence_url: https://www.bankofcanada.ca/core-functions/retail-payments-supervision/psp-registry/psp-registry-details/?account_id=75a7e334-7098-ef11-8a69-6045bd5e516b
+  matched_domain: tipalti.com
+  matched_by: domain
+  reasons:
+  - published_date: May 28, 2026
+    authority:
+    - Retail Payment Activities Act (RPAA) 52(e) – The payment service provider has ceased to perform retail payment activities
+    reason: Tipalti Inc. informed the Bank that it has ceased operations in Canada as of March 1, 2026. Its services are now
+      performed by an affiliated entity, Tipalti Canada, Inc., itself a registered PSP with the Bank. The Bank is revoking
+      Tipalti Inc.’s registration as a PSP. A Notice of intent to revoke was issued on April 27, 2026. Tipalti Inc. did not
+      request a review (under subsection 53(1) of the RPAA) of the Bank’s Notice of intent to revoke its registration status.
+      The Notice of Revocation was issued on May 28, 2026. Tipalti Inc. a informé la Banque d’avoir cessé ses activités au
+      Canada le 1er mars 2026. Ses services sont maintenant fournis par une entité affiliée, Tipalti Canada, Inc., elle-même
+      un FSP enregistré auprès de la Banque. La Banque a donc révoqué l’enregistrement de Tipalti Inc. à titre de FSP. Un
+      avis d’intention de révoquer l’enregistrement a été donné le 27 avril 2026. Tipalti Inc. n’a pas demandé, en vertu du
+      paragraphe 53(1) de la LAAPD, que soit révisé l’avis d’intention de la Banque de révoquer son enregistrement. L’avis
+      de révocation a été donné le 28 mai 2026.
+  negative_finding: true
+note: A refusal or revocation under the Retail Payment Activities Act is a negative regulated finding; it is recorded here
+  and is NOT an integration edge (it never counts toward participation).
+checked: '2026-10-22'
